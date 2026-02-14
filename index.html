@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<title>ระบบค่าน้ำค่าไฟ</title>
+
+<style>
+body{
+font-family:Kanit,sans-serif;
+background:#0f1115;
+color:white;
+padding:20px;
+}
+.card{
+max-width:500px;
+margin:auto;
+background:#171a21;
+padding:20px;
+border-radius:20px;
+}
+input,select,button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
+border:none;
+}
+button{
+background:white;
+color:black;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+<div class="card">
+<h2>คำนวณค่าน้ำค่าไฟ</h2>
+
+<select id="tenant">
+<option value="">เลือกผู้เช่า</option>
+<option>นาย เสกสรร แย้มสรวญ</option>
+<option>นส. สุธิกาญจน์ เฟื่องสุขพัชร์</option>
+</select>
+
+<input id="month" placeholder="เดือน">
+<input id="date" placeholder="วันที่">
+
+<input id="elecOld" placeholder="ไฟเก่า">
+<input id="elecNew" placeholder="ไฟใหม่">
+
+<input id="waterOld" placeholder="น้ำ1เก่า">
+<input id="waterNew" placeholder="น้ำ1ใหม่">
+
+<input id="waterOld2" placeholder="น้ำ2เก่า">
+<input id="waterNew2" placeholder="น้ำ2ใหม่">
+
+<button onclick="send()">สร้างใบแจ้งหนี้</button>
+</div>
+
+<script>
+
+const WEB_APP_URL = "YOUR_WEB_APP_URL";
+
+function send(){
+
+fetch(WEB_APP_URL,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+tenant:tenant.value,
+month:month.value,
+date:date.value,
+elecOld:+elecOld.value,
+elecNew:+elecNew.value,
+waterOld:+waterOld.value,
+waterNew:+waterNew.value,
+waterExtraOld:+waterOld2.value,
+waterExtraNew:+waterNew2.value
+})
+})
+.then(res=>res.json())
+.then(data=>{
+alert("สร้างสำเร็จ");
+window.open(data.url,'_blank');
+});
+
+}
+
+if('serviceWorker' in navigator){
+navigator.serviceWorker.register('service-worker.js');
+}
+
+</script>
+</body>
+</html>
